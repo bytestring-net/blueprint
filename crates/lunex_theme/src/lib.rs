@@ -58,32 +58,29 @@ impl ColorPair {
     }
 }
 
-/// # Mode
-/// 
-/// * [Mode::Light]
-/// * [Mode::Dark]
-/// * [Mode::Neutral]
-pub enum Mode {
-    /// Use colors offset for light mode
-    Light,
-    /// Use colors offset for dark mode
-    Dark,
-    /// Use colors as they are with no offset
-    Neutral,
-}
+
 
 pub struct Theme {
+    /// Name of the theme
     pub name: String,
-    pub mode: Mode,         // Should be in CurrentTheme struct instead of the preset?
+    /// Theme tags (ex. "Dark" or "Colorblind")
+    pub tags: Vec<String>,
 
     pub primary   : ColorPair,
     pub secondary : ColorPair,
     pub tertiary  : ColorPair,
     pub quaternery: ColorPair,
+
+    /// Color of the "INFO" widgets
     pub info      : ColorPair,
+    /// Color of the "WARNING" widgets
     pub warning   : ColorPair,
+    /// Color of the "SUCCESS" widgets
     pub success   : ColorPair,
+    /// Color of the "ERROR" widgets
     pub error     : ColorPair,
+
+    /// Color of the background fill
     pub surface   : ColorPair,
 
     pub font_base: Handle<Font>,
@@ -97,22 +94,32 @@ pub struct Theme {
     pub border_color      : ThemeColor,
 }
 
-pub enum Rounded {
-    None,
-    XS,
-    SM,
-    MD,
-    LG,
-    XL,
-    XL2,
-    XL3,
-    XL4,
-    XL5,
-    XL6,
-    XL7,
-    Full,
-    Custom(f32)
+pub struct ColorSet {
+    pub shades: Vec<Color>,
 }
+impl ColorSet {
+    pub fn get_val(&self, x: f32) -> Color {
+        let n = self.shades.len() as f32;
+        if n == 0.0 { return Color::WHITE }
+        let i = f32::clamp((n - 1.0) * (x / 1000.0), 0.0, n) as usize;
+        self.shades[i]
+    }
+    pub fn get_index(&self, i: usize) -> Color {
+        if i+1 >= self.shades.len() { return Color::WHITE }
+        self.shades[i]
+    }
+}
+impl From<Color> for ColorSet {
+    fn from(value: Color) -> Self {
+        ColorSet { shades: vec![value] }
+    }
+}
+impl From<Vec<Color>> for ColorSet {
+    fn from(value: Vec<Color>) -> Self {
+        ColorSet { shades: value }
+    }
+}
+
 
 /// ## Theme Color
 /// A specific color picked from predefined color pool.

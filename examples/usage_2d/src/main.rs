@@ -1,52 +1,44 @@
 use bevy::prelude::*;
 use bevy_lunex::prelude::*;
-//use bevy_vector_shapes::prelude::*;
 
 fn main() {
     App::new()
-        .add_plugins(DefaultPlugins)
-        .add_plugins(UiPlugin::<NoData, NoData, MyWidget>::new())
+        .add_plugins((DefaultPlugins, UiPlugin::<NoData, NoData, MyWidget>::new()))
         .add_plugins(UiDebugPlugin::<NoData, NoData, MyWidget>::new())
-
-        //.add_plugins(Shape2dPlugin::default())
-        //.add_systems(Update, render_update)
         .add_systems(Startup, setup)
         .run();
 }
 
-fn setup(mut cmd: Commands, mut _mat: ResMut<Assets<StandardMaterial>>, assets: Res<AssetServer>) {
+fn setup(mut commands: Commands) {
 
-    cmd.spawn((
-        MyWidget,
-        Camera2dBundle {
-            transform: Transform::from_xyz(0.0, 0.0, 1000.0),
-            camera: Camera::default(),
-            ..default()
-        }
-    ));
+    commands.spawn(( MyWidget, Camera2dBundle { transform: Transform::from_xyz(0.0, 0.0, 1000.0), ..default() } ));
 
-    cmd.spawn((
+    commands.spawn((
         UiTreeBundle::<NoData, NoData, MyWidget> {
-            tree: UiTree::new("MyWidget"),
-            dimension: Dimension::new((1000.0, 1000.0)),
-            transform: Transform::from_xyz(0.0, 0.0, 0.0),
+            tree: UiTree::new("Editor"),
             ..default()
         },
         MovableByCamera,
     )).with_children(|parent| {
 
+        let root = UiLink::path("Root");
         parent.spawn((
             MyWidget,
-            UiLink::path("Root"),
-            UiLayout::Window::FULL.pos( Abs(20.0) ).size( Prc(100.0) - Abs(40.0) ).pack(),
+            root.clone(),
+            UiLayout::Window::FULL.pack(),
         ));
+
 
         parent.spawn((
             MyWidget,
             UiLink::path("Root/Square"),
-            UiLayout::Solid::new().size(Abs((1920.0, 1080.0))).pack(),
-            UiImage2dBundle::from(assets.load("background.png")),
-            //UiMaterial3dBundle::from( mat.add(StandardMaterial { base_color_texture: Some(assets.load("background.png")), unlit: true, ..default() }) ),
+            UiLayout::Solid::new().size(Abs((1920.0, 1080.0))).cover(Cover::Full).pack(),
+        ));
+
+        parent.spawn((
+            MyWidget,
+            UiLink::path("Root/Board"),
+            UiLayout::Solid::new().size(Abs((807.0, 1432.0))).align_x(Align(-0.8)).pack(),
         ));
 
     });

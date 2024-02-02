@@ -1,0 +1,41 @@
+[workspace]
+  resolver = "2"
+  members = [
+    "crates/*",
+    "examples/*",
+  ]
+
+[profile.dev]
+  opt-level = 1
+
+[workspace.package]
+  authors     = ["Dominik Kaspar"]
+  version     = "0.0.1"
+  edition     = "2021"
+  license     = "MIT OR Apache-2.0"
+  repository  = "https://github.com/bytestring-net/blueprint_ui"
+  keywords    = ["ui", "component", "preset", "library", "bevy", "lunex"]
+  categories  = ["gui"]
+
+[workspace.dependencies]
+  #bevy = { version = "0.12.1", default_features = false, features = [
+  bevy = { git = "https://github.com/bevyengine/bevy", default_features = false, features = [
+    "bevy_asset",
+    "bevy_gilrs",
+    "bevy_winit",
+    "bevy_core_pipeline",
+    "bevy_pbr",
+    "bevy_render",
+    "bevy_sprite",
+    "bevy_text",
+    "multi-threaded",
+    "png",
+    "hdr",
+    "x11",
+    "default_font",
+  ] }
+
+  bevy_vector_shapes = { version = "0.6.0" }
+
+  bevy_lunex         = { git = "https://github.com/bytestring-net/bevy_lunex/crates/bevy_lunex" }
+  lunex_engine       = { git = "https://github.com/bytestring-net/lunex_engine/crates/lunex_engine" }

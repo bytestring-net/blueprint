@@ -22,16 +22,16 @@
   bevy = { git = "https://github.com/bevyengine/bevy", default_features = false, features = [
     #"bevy_asset",
     #"bevy_gilrs",
-    #"bevy_winit",
+    "bevy_winit",
     #"bevy_core_pipeline",
     #"bevy_pbr",
-    #"bevy_render",
+    "bevy_render",
     #"bevy_sprite",
     #"bevy_text",
-    #"multi-threaded",
+    "multi-threaded",
     #"png",
     #"hdr",
-    #"x11",
+    "x11",
     #"default_font",
   ] }
 

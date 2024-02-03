@@ -1,59 +1,6 @@
-use bevy::prelude::*;
+use bevy::{prelude::*, utils::HashMap};
+use bevy_lunex::prelude::NodeSize;
 
-
-
-// Theme Plugin (has system looping through all containers)
-
-
-/// # Lunex Theme
-/// Containes all ECS components for styling the container.
-/// Can be compared to TailwindCSS classes.
-pub mod ltm {
-    use bevy::ecs::component::Component;
-
-    /// # NodeData
-    /// Marker component to apply container styling to the container
-    #[derive(Debug, Default, Clone, Copy, PartialEq, Component)]
-    pub struct NodeData;
-
-
-    /// # Base Color
-    /// Color of the container elements
-    #[derive(Debug, Default, Clone, Copy, PartialEq, Component)]
-    pub struct BaseColor(pub super::ThemeColor);
-
-    /// # Text Color
-    /// Color of the container's text
-    #[derive(Debug, Default, Clone, Copy, PartialEq, Component)]
-    pub struct TextColor(pub super::ThemeColor);
-
-    /// # Opacity
-    /// Overall opacity of the container
-    #[derive(Debug, Default, Clone, Copy, PartialEq, Component)]
-    pub struct Opacity(pub f32);
-
-    /// # Base Opacity
-    /// Opacity of the container elements
-    #[derive(Debug, Default, Clone, Copy, PartialEq, Component)]
-    pub struct BaseOpacity(pub f32);
-
-    /// # Font Opacity
-    /// Opacity of the container's text
-    #[derive(Debug, Default, Clone, Copy, PartialEq, Component)]
-    pub struct TextOpacity(pub f32);
-}
-
-
-#[derive(Debug, Default, Clone, Copy, PartialEq)]
-pub struct ColorPair {
-    pub base_color: Color,
-    pub text_color: Color,
-}
-impl ColorPair {
-    pub fn v(self, l: f32) -> Color {
-        self.base_color.with_l((500.0 - l)/500.0)
-    }
-}
 
 
 
@@ -63,11 +10,12 @@ pub struct Theme {
     /// Theme tags (ex. "Dark" or "Colorblind")
     pub tags: Vec<String>,
 
+    /// Primary striking color
     pub primary   : ColorPair,
+    /// Secondary striking color
     pub secondary : ColorPair,
+    /// Tertiary striking color
     pub tertiary  : ColorPair,
-    pub quaternery: ColorPair,
-
     /// Color of the "INFO" widgets
     pub info      : ColorPair,
     /// Color of the "WARNING" widgets
@@ -76,21 +24,39 @@ pub struct Theme {
     pub success   : ColorPair,
     /// Color of the "ERROR" widgets
     pub error     : ColorPair,
-
     /// Color of the background fill
     pub surface   : ColorPair,
 
+    /// The color of the text
+    pub text: Color,
+
+    /// Additional custom colors that didn't fit in the template
+    pub custom: HashMap<String, ColorPair>,
+
+    /// Text font of general text
     pub font_base: Handle<Font>,
+    /// Text font of headings
     pub font_heading: Handle<Font>,
 
-    pub text_color: Color,
 
-    pub rounding_container: f32,
-    pub rounding_base     : f32,
-    pub border_width      : f32,
+    pub rounding_container: NodeSize<Vec4>,
+    pub rounding_base     : NodeSize<Vec4>,
+    pub border_thickness  : NodeSize<Vec4>,
+
+    pub highlight_color   : ThemeColor,
     pub border_color      : ThemeColor,
 }
 
+
+/// Pair of color set and one text color
+#[derive(Debug, Default, Clone, PartialEq)]
+pub struct ColorPair {
+    pub text: Color,
+    pub base: ColorSet,
+}
+
+/// Set of a different shades of one color sorted from lightest to darkest
+#[derive(Debug, Default, Clone, PartialEq)]
 pub struct ColorSet {
     pub shades: Vec<Color>,
 }
@@ -117,23 +83,24 @@ impl From<Vec<Color>> for ColorSet {
     }
 }
 
-
-/// ## Theme Color
-/// A specific color picked from predefined color pool.
-/// Allows for easy color swapping.
-#[derive(Debug, Clone, Copy, PartialEq)]
+/// Color selector from theme
+#[derive(Debug, Clone, PartialEq)]
 pub enum ThemeColor {
     Primary(f32),
     Secondary(f32),
     Tertiary(f32),
-    Quaternery(f32),
     Info(f32),
     Warning(f32),
     Success(f32),
     Error(f32),
     Surface(f32),
-    Neutral(f32),
-    Custom(ColorPair, f32),
+    Custom(String, f32),
+    Unique(ColorPair, f32),
+}
+impl Default for ThemeColor {
+    fn default() -> Self {
+        ThemeColor::SURFACE_500
+    }
 }
 impl ThemeColor {
     pub const PRIMARY_50: ThemeColor = ThemeColor::Primary(50.0);
@@ -168,17 +135,6 @@ impl ThemeColor {
     pub const TERTIARY_700: ThemeColor = ThemeColor::Tertiary(700.0);
     pub const TERTIARY_800: ThemeColor = ThemeColor::Tertiary(800.0);
     pub const TERTIARY_900: ThemeColor = ThemeColor::Tertiary(900.0);
-
-    pub const QUATERNARY_50: ThemeColor = ThemeColor::Quaternery(50.0);
-    pub const QUATERNARY_100: ThemeColor = ThemeColor::Quaternery(100.0);
-    pub const QUATERNARY_200: ThemeColor = ThemeColor::Quaternery(200.0);
-    pub const QUATERNARY_300: ThemeColor = ThemeColor::Quaternery(300.0);
-    pub const QUATERNARY_400: ThemeColor = ThemeColor::Quaternery(400.0);
-    pub const QUATERNARY_500: ThemeColor = ThemeColor::Quaternery(500.0);
-    pub const QUATERNARY_600: ThemeColor = ThemeColor::Quaternery(600.0);
-    pub const QUATERNARY_700: ThemeColor = ThemeColor::Quaternery(700.0);
-    pub const QUATERNARY_800: ThemeColor = ThemeColor::Quaternery(800.0);
-    pub const QUATERNARY_900: ThemeColor = ThemeColor::Quaternery(900.0);
 
     pub const INFO_50: ThemeColor = ThemeColor::Info(50.0);
     pub const INFO_100: ThemeColor = ThemeColor::Info(100.0);
@@ -235,19 +191,4 @@ impl ThemeColor {
     pub const SURFACE_800: ThemeColor = ThemeColor::Surface(800.0);
     pub const SURFACE_900: ThemeColor = ThemeColor::Surface(900.0);
 
-    pub const NEUTRAL_50: ThemeColor = ThemeColor::Neutral(50.0);
-    pub const NEUTRAL_100: ThemeColor = ThemeColor::Neutral(100.0);
-    pub const NEUTRAL_200: ThemeColor = ThemeColor::Neutral(200.0);
-    pub const NEUTRAL_300: ThemeColor = ThemeColor::Neutral(300.0);
-    pub const NEUTRAL_400: ThemeColor = ThemeColor::Neutral(400.0);
-    pub const NEUTRAL_500: ThemeColor = ThemeColor::Neutral(500.0);
-    pub const NEUTRAL_600: ThemeColor = ThemeColor::Neutral(600.0);
-    pub const NEUTRAL_700: ThemeColor = ThemeColor::Neutral(700.0);
-    pub const NEUTRAL_800: ThemeColor = ThemeColor::Neutral(800.0);
-    pub const NEUTRAL_900: ThemeColor = ThemeColor::Neutral(900.0);
-}
-impl Default for ThemeColor {
-    fn default() -> Self {
-        ThemeColor::SURFACE_500
-    }
 }

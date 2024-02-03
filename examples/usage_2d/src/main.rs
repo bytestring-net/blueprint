@@ -38,14 +38,8 @@ fn setup(mut commands: Commands) {
 
         ui.spawn((
             EditorUi,
-            root.add("Background"),
-            UiLayout::Solid::new().size(Abs((1920.0, 1080.0))).cover(Cover::Full).pack(),
-        ));
-
-        ui.spawn((
-            EditorUi,
             root.add("Center"),
-            UiLayout::Solid::new().size(Abs((807.0, 1432.0))).pack(),
+            UiLayout::Solid::new().size(Abs((500.0, 500.0))).pack(),
         ));
 
     });

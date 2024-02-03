@@ -1,52 +1,57 @@
 use bevy::prelude::*;
 use bevy_lunex::prelude::*;
 
+// Define the grouping marker component
+#[derive(Component, Debug, Default, Clone, PartialEq)]
+pub struct EditorUi;
+
+// Create application
 fn main() {
     App::new()
-        .add_plugins((DefaultPlugins, UiPlugin::<NoData, NoData, MyWidget>::new()))
-        .add_plugins(UiDebugPlugin::<NoData, NoData, MyWidget>::new())
+        .add_plugins((DefaultPlugins, UiPlugin::<NoData, NoData, EditorUi>::new()))
+        .add_plugins(UiDebugPlugin::<NoData, NoData, EditorUi>::new())
         .add_systems(Startup, setup)
         .run();
 }
 
+// Declare layout and logic
 fn setup(mut commands: Commands) {
 
-    commands.spawn(( MyWidget, Camera2dBundle { transform: Transform::from_xyz(0.0, 0.0, 1000.0), ..default() } ));
+    // Spawn camera as source for the ui
+    commands.spawn(( EditorUi, Camera2dBundle { transform: Transform::from_xyz(0.0, 0.0, 1000.0), ..default() } ));
 
+    // Spawn the main ui entity
     commands.spawn((
-        UiTreeBundle::<NoData, NoData, MyWidget> {
+        UiTreeBundle::<NoData, NoData, EditorUi> {
             tree: UiTree::new("Editor"),
             ..default()
         },
         MovableByCamera,
-    )).with_children(|parent| {
+    )).with_children(|ui| {
 
         let root = UiLink::path("Root");
-        parent.spawn((
-            MyWidget,
+        ui.spawn((
+            EditorUi,
             root.clone(),
             UiLayout::Window::FULL.pack(),
         ));
 
-
-        parent.spawn((
-            MyWidget,
-            UiLink::path("Root/Square"),
+        ui.spawn((
+            EditorUi,
+            root.add("Background"),
             UiLayout::Solid::new().size(Abs((1920.0, 1080.0))).cover(Cover::Full).pack(),
         ));
 
-        parent.spawn((
-            MyWidget,
-            UiLink::path("Root/Board"),
-            UiLayout::Solid::new().size(Abs((807.0, 1432.0))).align_x(Align(-0.8)).pack(),
+        ui.spawn((
+            EditorUi,
+            root.add("Center"),
+            UiLayout::Solid::new().size(Abs((807.0, 1432.0))).pack(),
         ));
 
     });
 
 }
 
-#[derive(Component, Debug, Default, Clone, PartialEq)]
-pub struct MyWidget;
 
 
 

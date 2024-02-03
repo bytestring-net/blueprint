@@ -1,8 +1,8 @@
-pub mod prelude {
-    
-}
-
 pub mod interactive {
+    pub struct TextInput;
+    pub struct TextField;
+    pub struct NumberInput;
+
     pub struct Button;
     pub struct Toggle;
     pub struct Selector;

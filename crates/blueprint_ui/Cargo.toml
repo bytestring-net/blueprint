@@ -1,5 +1,5 @@
 [package]
-  name = "lunex_preset"
+  name = "blueprint_ui"
   authors.workspace    = true
   version.workspace    = true
   edition.workspace    = true
@@ -9,3 +9,4 @@
   categories.workspace = true
 
 [dependencies]
+  bevy = { workspace = true }

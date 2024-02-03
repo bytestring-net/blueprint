@@ -1,9 +1,6 @@
 use bevy::prelude::*;
 
 
-pub mod prelude {
-    pub use super::Theme;
-}
 
 // Theme Plugin (has system looping through all containers)
 
@@ -23,12 +20,12 @@ pub mod ltm {
     /// # Base Color
     /// Color of the container elements
     #[derive(Debug, Default, Clone, Copy, PartialEq, Component)]
-    pub struct BaseColor(pub crate::ThemeColor);
+    pub struct BaseColor(pub super::ThemeColor);
 
     /// # Text Color
     /// Color of the container's text
     #[derive(Debug, Default, Clone, Copy, PartialEq, Component)]
-    pub struct TextColor(pub crate::ThemeColor);
+    pub struct TextColor(pub super::ThemeColor);
 
     /// # Opacity
     /// Overall opacity of the container

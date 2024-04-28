@@ -10,8 +10,8 @@ pub struct EditorUi;
 fn main() {
     App::new()
         .add_plugins((DefaultPlugins, UiPlugin::<NoData, NoData, EditorUi>::new()))
-        .add_plugins(UiDebugPlugin::<NoData, NoData, EditorUi>::new())
-        .add_plugins(BlueprintUiPlugin)
+        //.add_plugins(UiDebugPlugin::<NoData, NoData, EditorUi>::new())
+        .add_plugins(BlueprintUiPlugin::<NoData, NoData, EditorUi>::new())
         .add_systems(Startup, setup)
         .run();
 }
@@ -36,18 +36,58 @@ fn setup(mut commands: Commands) {
             EditorUi,
             root.clone(),
             UiLayout::Window::FULL.pack(),
+            //Transform::default(),
+            //Dimension::default(),
+            //Background { color: Color::rgb_u8(48, 52, 70) },
         ));
 
         ui.spawn((
             EditorUi,
-            root.add("Center"),
-            UiLayout::Solid::new().size((500.0, 500.0))
-            //.align_x(Align::END)
-            .pack(),
+            root.add("SidePanel"),
+            UiLayout::Window::new().size(Abs(Vec2::new(60.0, 0.0)) + Prc(Vec2::new(0.0, 100.0))).pack(),
             Transform::default(),
             Dimension::default(),
-            Background { color: Color::RED }
+            Background { color: Color::rgb_u8(35, 38, 52) },
         ));
+
+        ui.spawn((
+            EditorUi,
+            root.add("Explorer"),
+            UiLayout::Window::new().pos(Abs(Vec2::new(60.0, 0.0))).size(Abs(Vec2::new(280.0, 0.0)) + Prc(Vec2::new(0.0, 100.0))).pack(),
+            Transform::default(),
+            Dimension::default(),
+            Background { color: Color::rgb_u8(41, 44, 60) },
+        ));
+
+        let window = root.add("Window");
+        ui.spawn((
+            EditorUi,
+            window.clone(),
+            UiLayout::Window::new().pos(Abs(Vec2::new(340.0, 0.0))).size(Prc(Vec2::new(100.0, 100.0)) - Abs(Vec2::new(340.0, 0.0))).pack(),
+            Transform::default(),
+            Dimension::default(),
+            Background { color: Color::rgb_u8(48, 52, 70) },
+        ));
+
+        ui.spawn((
+            EditorUi,
+            window.add("Tabs"),
+            UiLayout::Window::new().size(Prc(Vec2::new(100.0, 0.0)) + Abs(Vec2::new(0.0, 45.0))).pack(),
+            Transform::default(),
+            Dimension::default(),
+            Background { color: Color::rgb_u8(35, 38, 52) },
+        ));
+
+        /* ui.spawn((
+            EditorUi,
+            root.add("Center"),
+            UiLayout::Solid::new().size((500.0, 500.0)).align_x(Align::END).pack(),
+            Transform::default(),
+            Dimension::default(),
+            Background { color: Color::GRAY },
+            //Rounded { radius: Vec4::splat(50.0) },
+            Border { color: Color::MIDNIGHT_BLUE * 2.2, thickness: Vec4::new(10.0, 10.0, 10.0, 10.0) },
+        )); */
 
     });
 

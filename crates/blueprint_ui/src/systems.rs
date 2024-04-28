@@ -31,8 +31,6 @@ pub fn render_ui<M:Default + Component, N:Default + Component, T: Component>(
 
                 // Apply transform
                 let mut pos = transform.translation + global_transform.translation();
-                pos.x += dimension.size.x / 2.0;
-                pos.y += dimension.size.y / -2.0;
                 pos.z -= 1.0;
                 painter.set_translation(pos);
     
@@ -87,8 +85,6 @@ pub fn render_ui<M:Default + Component, N:Default + Component, T: Component>(
         }
     }
 }
-
-
 
 
 // #===============#

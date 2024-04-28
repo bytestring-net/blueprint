@@ -1,5 +1,4 @@
 use bevy::prelude::*;
-use bevy_lunex::prelude::*;
 
 
 // #==================#
@@ -28,16 +27,18 @@ pub struct Border {
 // #===============#
 // #=== BUNDLES ===#
 
-#[derive(Bundle, Debug, Clone, PartialEq)]
+/* #[derive(Bundle, Debug, Clone, PartialEq)]
 pub struct BlueprintUiBundle {
     pub transform: Transform,
     pub dimension: Dimension,
+    pub element: Element,
 }
 impl Default for BlueprintUiBundle {
     fn default() -> Self {
         BlueprintUiBundle {
             transform: Transform::default(),
             dimension: Dimension::default(),
+            element: Element,
         }
     }
-}
+} */

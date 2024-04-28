@@ -1,5 +1,6 @@
 use bevy::prelude::*;
 use bevy_lunex::prelude::*;
+use blueprint_ui::prelude::*;
 
 // Define the grouping marker component
 #[derive(Component, Debug, Default, Clone, PartialEq)]
@@ -10,6 +11,7 @@ fn main() {
     App::new()
         .add_plugins((DefaultPlugins, UiPlugin::<NoData, NoData, EditorUi>::new()))
         .add_plugins(UiDebugPlugin::<NoData, NoData, EditorUi>::new())
+        .add_plugins(BlueprintUiPlugin)
         .add_systems(Startup, setup)
         .run();
 }
@@ -39,7 +41,12 @@ fn setup(mut commands: Commands) {
         ui.spawn((
             EditorUi,
             root.add("Center"),
-            UiLayout::Solid::new().size(Abs((500.0, 500.0))).pack(),
+            UiLayout::Solid::new().size((500.0, 500.0))
+            //.align_x(Align::END)
+            .pack(),
+            Transform::default(),
+            Dimension::default(),
+            Background { color: Color::RED }
         ));
 
     });

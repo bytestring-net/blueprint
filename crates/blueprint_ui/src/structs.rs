@@ -6,19 +6,19 @@ use bevy_lunex::prelude::*;
 // #=== COMPONENTS ===#
 
 /// Specifies what color to use to fill the Node
-#[derive(Component)]
+#[derive(Component, Debug, Default, Clone, PartialEq)]
 pub struct Background {
     pub color: Color,
 }
 
 /// Specifies what corner rounding to use for the Node
-#[derive(Component)]
+#[derive(Component, Debug, Default, Clone, PartialEq)]
 pub struct Rounded {
     pub radius: Vec4,
 }
 
 /// Specifies the border color and thickness of the Node
-#[derive(Component)]
+#[derive(Component, Debug, Default, Clone, PartialEq)]
 pub struct Border {
     pub color: Color,
     pub thickness: Vec4,
@@ -28,21 +28,14 @@ pub struct Border {
 // #===============#
 // #=== BUNDLES ===#
 
-/// Specifies the border color and thickness of the Node
-#[derive(Bundle)]
-pub struct UiNodeBundle<T: Component> {
-    pub marker: T,
-    pub link: UiLink,
-    pub layout: Layout,
+#[derive(Bundle, Debug, Clone, PartialEq)]
+pub struct BlueprintUiBundle {
     pub transform: Transform,
     pub dimension: Dimension,
 }
-impl <T: Component + Default> Default for UiNodeBundle<T> {
+impl Default for BlueprintUiBundle {
     fn default() -> Self {
-        UiNodeBundle {
-            marker: T::default(),
-            link: UiLink::default(),
-            layout: Layout::default(),
+        BlueprintUiBundle {
             transform: Transform::default(),
             dimension: Dimension::default(),
         }

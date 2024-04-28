@@ -17,7 +17,12 @@ fn main() {
 }
 
 // Declare layout and logic
-fn setup(mut commands: Commands) {
+fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
+
+    // Load font handles
+    let font_light: Handle<Font> = asset_server.load("fonts/Roboto/Roboto-Light.ttf");
+    let font_medium: Handle<Font> = asset_server.load("fonts/Roboto/Roboto-Medium.ttf");
+    let font_bold: Handle<Font> = asset_server.load("fonts/Roboto/Roboto-Bold.ttf");
 
     // Spawn camera as source for the ui
     commands.spawn(( EditorUi, Camera2dBundle { transform: Transform::from_xyz(0.0, 0.0, 1000.0), ..default() } ));
@@ -46,6 +51,7 @@ fn setup(mut commands: Commands) {
                 layout: UiLayout::Window::new().size(Abs(Vec2::new(60.0, 0.0)) + Prc(Vec2::new(0.0, 100.0))).pack(),
                 ..default()
             },
+            BlueprintUiBundle::default(),
             Background { color: Color::rgb_u8(35, 38, 52) },
         ));
 
@@ -56,6 +62,7 @@ fn setup(mut commands: Commands) {
                 layout: UiLayout::Window::new().pos(Abs(Vec2::new(60.0, 0.0))).size(Abs(Vec2::new(280.0, 0.0)) + Prc(Vec2::new(0.0, 100.0))).pack(),
                 ..default()
             },
+            BlueprintUiBundle::default(),
             Background { color: Color::rgb_u8(41, 44, 60) },
         ));
 
@@ -67,6 +74,7 @@ fn setup(mut commands: Commands) {
                 layout: UiLayout::Window::new().pos(Abs(Vec2::new(340.0, 0.0))).size(Prc(Vec2::new(100.0, 100.0)) - Abs(Vec2::new(340.0, 0.0))).pack(),
                 ..default()
             },
+            BlueprintUiBundle::default(),
             Background { color: Color::rgb_u8(48, 52, 70) },
         ));
 
@@ -78,6 +86,7 @@ fn setup(mut commands: Commands) {
                 layout: UiLayout::Window::new().size(Prc(Vec2::new(100.0, 0.0)) + Abs(Vec2::new(0.0, 45.0))).pack(),
                 ..default()
             },
+            BlueprintUiBundle::default(),
             Background { color: Color::rgb_u8(35, 38, 52) },
         ));
 
@@ -88,6 +97,7 @@ fn setup(mut commands: Commands) {
                 layout: UiLayout::Window::new().size(Prc(Vec2::new(0.0, 100.0)) + Abs(Vec2::new(150.0, 1.0))).pack(),
                 ..default()
             },
+            BlueprintUiBundle::default(),
             Background { color: Color::rgb_u8(48, 52, 70) },
         ));
 
@@ -98,6 +108,7 @@ fn setup(mut commands: Commands) {
                 layout: UiLayout::Window::new().pos(Abs(Vec2::new(150.0, 0.0))).size(Prc(Vec2::new(0.0, 100.0)) + Abs(Vec2::new(150.0, 1.0))).pack(),
                 ..default()
             },
+            BlueprintUiBundle::default(),
             Background { color: Color::rgb_u8(41, 44, 60) },
         ));
 
@@ -109,29 +120,19 @@ fn setup(mut commands: Commands) {
                 ..default()
             },
             Background { color: Color::rgb_u8(41, 44, 60) },
+
+            UiText2dBundle {
+                text: Text::from_section("systems.rs",
+                    TextStyle {
+                        font: font_medium.clone(),
+                        font_size: 50.0,
+                        color: Color::rgb_u8(166, 209, 137),
+                    }),
+                ..default()
+            }
         ));
 
     });
 
 }
 
-
-
-
-/*#[derive(Component)]
-struct RenderContainer {
-    color: Color,
-    corner_radii: Vec4
-}
-fn render_update (mut painter: ShapePainter, query: Query<(&Dimension, &RenderContainer)>) {
-    for (dimension, color) in &query {
-
-        //painter.set_translation(transform.translation);
-        painter.set_scale(Vec3::splat(1.0));
-
-        painter.color = color.color;
-        painter.thickness = 1.0;
-        painter.corner_radii = color.corner_radii;
-        painter.rectangle(Vec2::new(dimension.size.x, dimension.size.y));
-    }
-}*/

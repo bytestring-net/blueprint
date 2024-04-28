@@ -31,63 +31,85 @@ fn setup(mut commands: Commands) {
         MovableByCamera,
     )).with_children(|ui| {
 
+        // Spawn our root node
         let root = UiLink::path("Root");
-        ui.spawn((
-            EditorUi,
-            root.clone(),
-            UiLayout::Window::FULL.pack(),
-            //Transform::default(),
-            //Dimension::default(),
-            //Background { color: Color::rgb_u8(48, 52, 70) },
-        ));
+        ui.spawn(UiNodeBundle::<EditorUi> {
+            link: root.clone(),
+            layout: UiLayout::Window::FULL.pack(),
+            ..default()
+        });
 
+        // Spawn side panel node
         ui.spawn((
-            EditorUi,
-            root.add("SidePanel"),
-            UiLayout::Window::new().size(Abs(Vec2::new(60.0, 0.0)) + Prc(Vec2::new(0.0, 100.0))).pack(),
-            Transform::default(),
-            Dimension::default(),
+            UiNodeBundle::<EditorUi> {
+                link: root.add("SidePanel"),
+                layout: UiLayout::Window::new().size(Abs(Vec2::new(60.0, 0.0)) + Prc(Vec2::new(0.0, 100.0))).pack(),
+                ..default()
+            },
             Background { color: Color::rgb_u8(35, 38, 52) },
         ));
 
+        // Spawn explorer node
         ui.spawn((
-            EditorUi,
-            root.add("Explorer"),
-            UiLayout::Window::new().pos(Abs(Vec2::new(60.0, 0.0))).size(Abs(Vec2::new(280.0, 0.0)) + Prc(Vec2::new(0.0, 100.0))).pack(),
-            Transform::default(),
-            Dimension::default(),
+            UiNodeBundle::<EditorUi> {
+                link: root.add("Explorer"),
+                layout: UiLayout::Window::new().pos(Abs(Vec2::new(60.0, 0.0))).size(Abs(Vec2::new(280.0, 0.0)) + Prc(Vec2::new(0.0, 100.0))).pack(),
+                ..default()
+            },
             Background { color: Color::rgb_u8(41, 44, 60) },
         ));
 
+        // Spawn window node
         let window = root.add("Window");
         ui.spawn((
-            EditorUi,
-            window.clone(),
-            UiLayout::Window::new().pos(Abs(Vec2::new(340.0, 0.0))).size(Prc(Vec2::new(100.0, 100.0)) - Abs(Vec2::new(340.0, 0.0))).pack(),
-            Transform::default(),
-            Dimension::default(),
+            UiNodeBundle::<EditorUi> {
+                link: window.clone(),
+                layout: UiLayout::Window::new().pos(Abs(Vec2::new(340.0, 0.0))).size(Prc(Vec2::new(100.0, 100.0)) - Abs(Vec2::new(340.0, 0.0))).pack(),
+                ..default()
+            },
             Background { color: Color::rgb_u8(48, 52, 70) },
         ));
 
+        // Spawn active tabs node
+        let tabs = window.add("Tabs");
         ui.spawn((
-            EditorUi,
-            window.add("Tabs"),
-            UiLayout::Window::new().size(Prc(Vec2::new(100.0, 0.0)) + Abs(Vec2::new(0.0, 45.0))).pack(),
-            Transform::default(),
-            Dimension::default(),
+            UiNodeBundle::<EditorUi> {
+                link: tabs.clone(),
+                layout: UiLayout::Window::new().size(Prc(Vec2::new(100.0, 0.0)) + Abs(Vec2::new(0.0, 45.0))).pack(),
+                ..default()
+            },
             Background { color: Color::rgb_u8(35, 38, 52) },
         ));
 
-        /* ui.spawn((
-            EditorUi,
-            root.add("Center"),
-            UiLayout::Solid::new().size((500.0, 500.0)).align_x(Align::END).pack(),
-            Transform::default(),
-            Dimension::default(),
-            Background { color: Color::GRAY },
-            //Rounded { radius: Vec4::splat(50.0) },
-            Border { color: Color::MIDNIGHT_BLUE * 2.2, thickness: Vec4::new(10.0, 10.0, 10.0, 10.0) },
-        )); */
+        // Spawn main.rs node
+        ui.spawn((
+            UiNodeBundle::<EditorUi> {
+                link: tabs.add("main.rs"),
+                layout: UiLayout::Window::new().size(Prc(Vec2::new(0.0, 100.0)) + Abs(Vec2::new(150.0, 1.0))).pack(),
+                ..default()
+            },
+            Background { color: Color::rgb_u8(48, 52, 70) },
+        ));
+
+        // Spawn structs.rs node
+        ui.spawn((
+            UiNodeBundle::<EditorUi> {
+                link: tabs.add("structs.rs"),
+                layout: UiLayout::Window::new().pos(Abs(Vec2::new(150.0, 0.0))).size(Prc(Vec2::new(0.0, 100.0)) + Abs(Vec2::new(150.0, 1.0))).pack(),
+                ..default()
+            },
+            Background { color: Color::rgb_u8(41, 44, 60) },
+        ));
+
+        // Spawn structs.rs node
+        ui.spawn((
+            UiNodeBundle::<EditorUi> {
+                link: tabs.add("systems.rs"),
+                layout: UiLayout::Window::new().pos(Abs(Vec2::new(300.0, 0.0))).size(Prc(Vec2::new(0.0, 100.0)) + Abs(Vec2::new(150.0, 1.0))).pack(),
+                ..default()
+            },
+            Background { color: Color::rgb_u8(41, 44, 60) },
+        ));
 
     });
 

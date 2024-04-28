@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+use bevy_lunex::prelude::*;
 
 
 // #==================#
@@ -21,4 +22,29 @@ pub struct Rounded {
 pub struct Border {
     pub color: Color,
     pub thickness: Vec4,
+}
+
+
+// #===============#
+// #=== BUNDLES ===#
+
+/// Specifies the border color and thickness of the Node
+#[derive(Bundle)]
+pub struct UiNodeBundle<T: Component> {
+    pub marker: T,
+    pub link: UiLink,
+    pub layout: Layout,
+    pub transform: Transform,
+    pub dimension: Dimension,
+}
+impl <T: Component + Default> Default for UiNodeBundle<T> {
+    fn default() -> Self {
+        UiNodeBundle {
+            marker: T::default(),
+            link: UiLink::default(),
+            layout: Layout::default(),
+            transform: Transform::default(),
+            dimension: Dimension::default(),
+        }
+    }
 }

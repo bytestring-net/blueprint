@@ -43,7 +43,7 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
         let root = UiLink::path("Root");
         ui.spawn(UiNodeBundle::<EditorUi> {
             link: root.clone(),
-            layout: UiLayout::Window::FULL.pack(),
+            layout: UiLayout::Window::full().pack(),
             ..default()
         });
 
@@ -52,7 +52,8 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
         ui.spawn((
             UiNodeBundle::<EditorUi> {
                 link: panel.clone(),
-                layout: UiLayout::Window::new().size(Abs(Vec2::new(60.0, 0.0)) + Prc(Vec2::new(0.0, 100.0))).pack(),
+                //layout: UiLayout::Window::new().size(Ab(Vec2::new(60.0, 0.0)) + Rl(Vec2::new(0.0, 100.0))).pack(),
+                layout: UiLayout::Window::new().size((Ab(60.0), Rl(100.0))).pack(),
                 ..default()
             },
             UiElementBundle::default(),
@@ -62,7 +63,7 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
             ui.spawn((
                 UiNodeBundle::<EditorUi> {
                     link: panel.add("Files"),
-                    layout: UiLayout::Window::new().size(Abs(Vec2::new(0.0, 60.0)) + Prc(Vec2::new(100.0, 0.0))).pack(),
+                    layout: UiLayout::Window::new().size(Ab(Vec2::new(0.0, 60.0)) + Rl(Vec2::new(100.0, 0.0))).pack(),
                     ..default()
                 },
                 Element::default(),
@@ -76,7 +77,7 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
             ui.spawn((
                 UiNodeBundle::<EditorUi> {
                     link: panel.add("Git"),
-                    layout: UiLayout::Window::new().pos((0.0, 60.0)).size(Abs(Vec2::new(0.0, 60.0)) + Prc(Vec2::new(100.0, 0.0))).pack(),
+                    layout: UiLayout::Window::new().pos((0.0, 60.0)).size(Ab(Vec2::new(0.0, 60.0)) + Rl(Vec2::new(100.0, 0.0))).pack(),
                     ..default()
                 },
                 Element::default(),
@@ -90,7 +91,7 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
             ui.spawn((
                 UiNodeBundle::<EditorUi> {
                     link: panel.add("Extensions"),
-                    layout: UiLayout::Window::new().pos((0.0, 120.0)).size(Abs(Vec2::new(0.0, 60.0)) + Prc(Vec2::new(100.0, 0.0))).pack(),
+                    layout: UiLayout::Window::new().pos((0.0, 120.0)).size(Ab(Vec2::new(0.0, 60.0)) + Rl(Vec2::new(100.0, 0.0))).pack(),
                     ..default()
                 },
                 Element::default(),
@@ -107,7 +108,7 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
         ui.spawn((
             UiNodeBundle::<EditorUi> {
                 link: explorer.clone(),
-                layout: UiLayout::Window::new().pos(Abs(Vec2::new(60.0, 0.0))).size(Abs(Vec2::new(280.0, 0.0)) + Prc(Vec2::new(0.0, 100.0))).pack(),
+                layout: UiLayout::Window::new().pos(Ab(Vec2::new(60.0, 0.0))).size(Ab(Vec2::new(280.0, 0.0)) + Rl(Vec2::new(0.0, 100.0))).pack(),
                 ..default()
             },
             UiElementBundle::default(),
@@ -118,7 +119,7 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
             ui.spawn((
                 UiNodeBundle::<EditorUi> {
                     link: entry.clone(),
-                    layout: UiLayout::Window::new().pos(Abs(Vec2::new(0.0, 20.0)) + Prc(Vec2::new(5.0, 0.0))).size(Abs(Vec2::new(0.0, 20.0)) + Prc(Vec2::new(95.0, 0.0))).pack(),
+                    layout: UiLayout::Window::new().pos(Ab(Vec2::new(0.0, 20.0)) + Rl(Vec2::new(5.0, 0.0))).size(Ab(Vec2::new(0.0, 20.0)) + Rl(Vec2::new(95.0, 0.0))).pack(),
                     ..default()
                 },
             ));
@@ -139,7 +140,7 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
                 ui.spawn((
                     UiNodeBundle::<EditorUi> {
                         link: entry.add("TextB"),
-                        layout: UiLayout::Window::new().pos((30.0, 0.0)).size(Prc(Vec2::new(80.0, 100.0))).pack(),
+                        layout: UiLayout::Window::new().pos((30.0, 0.0)).size(Rl(Vec2::new(80.0, 100.0))).pack(),
                         ..default()
                     },
                 ));
@@ -169,7 +170,7 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
         ui.spawn((
             UiNodeBundle::<EditorUi> {
                 link: window.clone(),
-                layout: UiLayout::Window::new().pos(Abs(Vec2::new(340.0, 0.0))).size(Prc(Vec2::new(100.0, 100.0)) - Abs(Vec2::new(340.0, 0.0))).pack(),
+                layout: UiLayout::Window::new().pos(Ab(Vec2::new(340.0, 0.0))).size(Rl(Vec2::new(100.0, 100.0)) - Ab(Vec2::new(340.0, 0.0))).pack(),
                 ..default()
             },
             UiElementBundle::default(),
@@ -181,7 +182,7 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
         ui.spawn((
             UiNodeBundle::<EditorUi> {
                 link: tabs.clone(),
-                layout: UiLayout::Window::new().size(Prc(Vec2::new(100.0, 0.0)) + Abs(Vec2::new(0.0, 45.0))).pack(),
+                layout: UiLayout::Window::new().size(Rl(Vec2::new(100.0, 0.0)) + Ab(Vec2::new(0.0, 45.0))).pack(),
                 ..default()
             },
             UiElementBundle::default(),
@@ -192,7 +193,7 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
             ui.spawn((
                 UiNodeBundle::<EditorUi> {
                     link: tabs.add("main.rs"),
-                    layout: UiLayout::Window::new().size(Prc(Vec2::new(0.0, 100.0)) + Abs(Vec2::new(150.0, 1.0))).pack(),
+                    layout: UiLayout::Window::new().size(Rl(Vec2::new(0.0, 100.0)) + Ab(Vec2::new(150.0, 1.0))).pack(),
                     ..default()
                 },
                 //BlueprintUiBundle::default(),
@@ -211,7 +212,7 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
             ui.spawn((
                 UiNodeBundle::<EditorUi> {
                     link: tabs.add("structs.rs"),
-                    layout: UiLayout::Window::new().pos(Abs(Vec2::new(150.0, 0.0))).size(Prc(Vec2::new(0.0, 100.0)) + Abs(Vec2::new(150.0, 1.0))).pack(),
+                    layout: UiLayout::Window::new().pos(Ab(Vec2::new(150.0, 0.0))).size(Rl(Vec2::new(0.0, 100.0)) + Ab(Vec2::new(150.0, 1.0))).pack(),
                     ..default()
                 },
                 UiElementBundle::default(),
@@ -230,7 +231,7 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
             ui.spawn((
                 UiNodeBundle::<EditorUi> {
                     link: tabs.add("systems.rs"),
-                    layout: UiLayout::Window::new().pos(Abs(Vec2::new(300.0, 0.0))).size(Prc(Vec2::new(0.0, 100.0)) + Abs(Vec2::new(150.0, 1.0))).pack(),
+                    layout: UiLayout::Window::new().pos(Ab(Vec2::new(300.0, 0.0))).size(Rl(Vec2::new(0.0, 100.0)) + Ab(Vec2::new(150.0, 1.0))).pack(),
                     ..default()
                 },
                 Background { color: Color::rgb_u8(41, 44, 60) },

@@ -10,20 +10,16 @@ use crate::structs::*;
 // #=== CORE SYSTEM ===#
 
 /// This system is behind the component polling and rendering the node.
-/// ## 📦 Types
-/// * Generic `(M)` - Master data schema struct defining what can be stored in [`UiTree`]
-/// * Generic `(N)` - Node data schema struct defining what can be stored in [`UiNode`]
-/// * Generic `(T)` - Marker component grouping entities into one widget type
-pub fn render_ui<M:Default + Component, N:Default + Component, T: Component>(
+pub fn render_ui<T: Component, N:Default + Component>(
     mut painter: ShapePainter,
-    uis: Query<(&Children, &GlobalTransform), (With<T>, With<UiTree<M, N>>)>,
+    uis: Query<(&Children, &GlobalTransform), (With<UiLink<T>>, With<UiTree<T, N>>)>,
     query: Query<(
         &Transform,
         &Dimension,
         Option<&Background>,
         Option<&Rounded>,
         Option<&Border>,
-    ), (With<T>, With<UiLink>)>,
+    ), With<UiLink<T>>>,
 ) {
     for (children, global_transform) in &uis {
         for child in children {
@@ -91,16 +87,16 @@ pub fn render_ui<M:Default + Component, N:Default + Component, T: Component>(
 // #=== PLUGINS ===#
 
 #[derive(Debug, Default, Clone)]
-pub struct BlueprintUiPlugin <M:Default + Component, N:Default + Component, T: Component>(PhantomData<M>, PhantomData<N>, PhantomData<T>);
-impl <M:Default + Component, N:Default + Component, T: Component> BlueprintUiPlugin<M, N, T> {
+pub struct BlueprintUiPlugin <T: Component = MainUi, N:Default + Component = NoData>(PhantomData<T>, PhantomData<N>);
+impl <T: Component, N:Default + Component> BlueprintUiPlugin<T, N> {
     pub fn new() -> Self {
-        BlueprintUiPlugin::<M, N, T>(PhantomData, PhantomData, PhantomData)
+        BlueprintUiPlugin::<T, N>(PhantomData, PhantomData)
     }
 }
-impl <M:Default + Component, N:Default + Component, T: Component> Plugin for BlueprintUiPlugin<M, N, T> {
+impl <T: Component, N:Default + Component> Plugin for BlueprintUiPlugin<T, N> {
     fn build(&self, app: &mut App) {
         app
             .add_plugins(Shape2dPlugin::default())
-            .add_systems(Update, render_ui::<M, N, T>);
+            .add_systems(Update, render_ui::<T, N>);
     }
 }

@@ -13,4 +13,5 @@
   bevy_lunex         = { workspace = true }
   bevy_svg           = { workspace = true }
   blueprint_ui       = { workspace = true }
+  bevy_mod_picking   = { workspace = true }
   #bevy_vector_shapes = { workspace = true }

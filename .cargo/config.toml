@@ -4,3 +4,6 @@ rustflags = ["-C", "link-arg=-fuse-ld=/usr/bin/mold"]
 
 [build]
 rustflags = ["-Z", "threads=8"]
+
+[env]
+RUST_BACKTRACE="1"
